@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+
+  "name": "Goto Google",
+  "description": "Go to your google search tab without open a new one",
+  "version": "1.0",
+
+  "browser_action": {
+  },
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ],
+  "commands": {
+    "toggle-feature-foo": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Toggle feature foo"
+    }
+  }
+}
