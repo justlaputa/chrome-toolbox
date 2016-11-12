@@ -7,17 +7,20 @@
 
   "browser_action": {
   },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
+    "tabs"
   ],
   "commands": {
-    "toggle-feature-foo": {
+    "goto-google-tab": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Y",
-        "mac": "Command+Shift+Y"
+        "default": "Ctrl+G",
+        "mac": "Command+G"
       },
-      "description": "Toggle feature foo"
+      "description": "jump to an opened google tab and start search"
     }
   }
 }
