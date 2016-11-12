@@ -16,11 +16,10 @@
   ],
   "commands": {
     "goto-google-tab": {
+      "description": "jump to an opened google tab and start search",
       "suggested_key": {
-        "default": "Ctrl+G",
-        "mac": "Command+G"
-      },
-      "description": "jump to an opened google tab and start search"
+        "default": "Ctrl+I"
+      }
     }
   }
 }
