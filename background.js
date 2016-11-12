@@ -211,17 +211,28 @@ chrome.commands.onCommand.addListener(function(command) {
     if (tabs.length === 0) {
       openNewGoogleTabAndJump();
     } else {
-      console.debug('found google tabs', tabs);
+      chrome.tabs.highlight({tabs: tabs[0].index}, function(tab) {
+        console.log('highlight first google tab', tab);
+      });
     }
   });
 });
 
 function findGoogleTabs(callback) {
-  chrome.tabs.query({url: GOOGLE_URLS}, callback);
+  chrome.tabs.query({url: GOOGLE_URLS}, function(tabs) {
+    if (tabs === undefined) callback([]);
+    else callback(tabs);
+  });
 }
 
 function openNewGoogleTabAndJump() {
-
+  chrome.tabs.create({
+    url: 'https://www.google.com',
+    index: 0,
+    active: true
+  }, function(tab) {
+    console.debug('created new google search tab', tab);
+  });
 }
 
 function closeOtherGoogleTabs(tabs) {
