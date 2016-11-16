@@ -219,7 +219,7 @@ chrome.commands.onCommand.addListener(function(command) {
 });
 
 function findGoogleTabs(callback) {
-  chrome.tabs.query({url: GOOGLE_URLS}, function(tabs) {
+  chrome.tabs.query({currentWindow: true, url: GOOGLE_URLS}, function(tabs) {
     if (tabs === undefined) callback([]);
     else callback(tabs);
   });
