@@ -220,8 +220,17 @@ chrome.commands.onCommand.addListener(function(command) {
 
 function findGoogleTabs(callback) {
   chrome.tabs.query({currentWindow: true, url: GOOGLE_URLS}, function(tabs) {
-    if (tabs === undefined) callback([]);
-    else callback(tabs);
+    if (tabs === undefined) {
+      console.debug('no google tabs found')
+      callback([]);
+    } else {
+      console.groupCollapsed('found %d google tabs', tabs.length);
+      for (var tab of tabs) {
+        console.dir(tab);
+      }
+      console.groupEnd();
+      callback(tabs);
+    }
   });
 }
 
