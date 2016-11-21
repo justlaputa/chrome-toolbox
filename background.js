@@ -11,14 +11,8 @@ chrome.commands.onCommand.addListener(function(command) {
     if (tabs.length === 0) {
       openNewGoogleTabAndJump();
     } else {
-      chrome.tabs.highlight({tabs: tabs[0].index}, function(tab) {
-        console.log('highlight first google tab', tab);
-        console.log('send message to google tab');
-
-        chrome.tabs.sendMessage(tabs[0].id, { type: 'JUMP_TO_SEARCH'}, function(response) {
-          console.log('get response from google tab content script', response);
-        });
-      });
+      jumpToPrimaryGoogleTab(tabs);
+      closeOtherGoogleTabs(tabs);
     }
   });
 });
@@ -49,10 +43,31 @@ function openNewGoogleTabAndJump() {
   });
 }
 
-function closeOtherGoogleTabs(tabs) {
+function closeOtherGoogleTabs(tabs, callback) {
+  if (tabs.length <= 1) {
+    console.debug('no more than 1 tabs, skip close other tabs');
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
+    return;
+  }
+  var otherIds = tabs.filter(function(_, index) {return index > 0}).map(function(t) {return t.id});
+  console.debug('close other tabs: [%s]', otherIds.join());
 
+  chrome.tabs.remove(otherIds, callback);
 }
 
-function moveGoogleTab(tab) {
+function jumpToPrimaryGoogleTab(tabs, callback) {
+  chrome.tabs.highlight({tabs: tabs[0].index}, function(tab) {
+    console.log('highlight first google tab', tab);
+    console.log('send message to google tab');
+
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'JUMP_TO_SEARCH'}, function(response) {
+      console.log('get response from google tab content script', response);
+    });
+  });
+}
+
+function moveGoogleTab(tab, callback) {
 
 }
