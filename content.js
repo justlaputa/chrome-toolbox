@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(
 );
 
 function highlightAndSelectSearchText() {
-  var inputBox = document.getElementById('lst-ib');
+  var inputBox = document.querySelector('input[title="Search"]');
   inputBox.focus();
   inputBox.select();
 }
