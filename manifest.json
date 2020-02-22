@@ -8,7 +8,10 @@
   "browser_action": {
   },
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "backgroundGoogleTab.js",
+      "backgroundTabSort.js"
+    ],
     "persistent": false
   },
   "content_scripts": [
