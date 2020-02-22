@@ -29,7 +29,7 @@ function sortTab(tab) {
             return
         }
 
-        console.log('query all tabs');
+        console.debug('query all tabs');
         printTabs(tabs);
 
         unpinnedTabs = tabs.filter(t => !t.pinned);
@@ -47,7 +47,7 @@ function sortTab(tab) {
             return firstUrl.href.localeCompare(secondUrl.href);
         });
 
-        console.log('sort unpinned tabs:');
+        console.debug('sort unpinned tabs:');
         printTabs(unpinnedTabs);
 
         moveTabs(unpinnedTabs, diff);
@@ -58,7 +58,7 @@ function moveTabs(sortedTabs, startIndex) {
     for(let i = 0; i < sortedTabs.length; i++) {
         const tab = sortedTabs[i];
         const destIndex = i + startIndex;
-        console.log('move tab %s: %s from %d -> %d', tab.id, tab.url, tab.index, destIndex);
+        console.debug('move tab %s: %s from %d -> %d', tab.id, tab.url, tab.index, destIndex);
         chrome.tabs.move(tab.id, {index: destIndex});
     }
 }
@@ -76,6 +76,6 @@ function getUrl(urlString) {
 
 function printTabs(tabs) {
     for (tab of tabs) {
-        console.log('%d: %s %s, pined: %s', tab.index, tab.url, tab.title, tab.pinned);
+        console.debug('%d: %s %s, pined: %s', tab.index, tab.url, tab.title, tab.pinned);
     }
 }
