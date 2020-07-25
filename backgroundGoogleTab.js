@@ -6,6 +6,9 @@ var GOOGLE_URLS =["https://www.google.com/*", "https://www.google.ac/*", "https:
 
 chrome.commands.onCommand.addListener(function(command) {
   console.debug('received command:', command);
+  if (command !== 'goto-google-tab') {
+    return;
+  }
 
   findGoogleTabs(function(tabs) {
     if (tabs.length === 0) {
@@ -66,8 +69,4 @@ function jumpToPrimaryGoogleTab(tabs, callback) {
       console.log('get response from google tab content script', response);
     });
   });
-}
-
-function moveGoogleTab(tab, callback) {
-
 }

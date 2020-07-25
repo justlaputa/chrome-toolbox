@@ -2,7 +2,19 @@
  * background scripts for sorting tabs
  */
 
-chrome.tabs.onUpdated.addListener(updateTab);
+/*
+ * disable auto sort tabs
+ */
+// chrome.tabs.onUpdated.addListener(updateTab);
+
+chrome.commands.onCommand.addListener(function(command) {
+    console.debug('received command:', command);
+    if (command !== 'sort-tabs') {
+        return;
+    }
+
+    sortTab();
+});
 
 /**
  * tab update callback function
@@ -18,11 +30,11 @@ function updateTab(tabId, changeInfo, tab) {
     console.debug(changeInfo);
 
     if (!tab.pinned && changeInfo.url) {
-        sortTab(tab);
+        sortTab();
     }
 }
 
-function sortTab(tab) {
+function sortTab() {
     chrome.tabs.query({}, tabs => {
         if (!tabs || tabs.length <= 0) {
             console.error('no tabs found');

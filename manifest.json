@@ -29,6 +29,12 @@
       "suggested_key": {
         "default": "Ctrl+I"
       }
+    },
+    "sort-tabs": {
+      "description": "sort all open tabs",
+      "suggested_key": {
+        "default": "Ctrl+U"
+      }
     }
   }
 }
