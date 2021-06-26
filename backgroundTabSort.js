@@ -56,7 +56,7 @@ function sortTab() {
             if (secondUrl.host == "www.google.com") {
                 return 1;
             }
-            return firstUrl.href.localeCompare(secondUrl.href);
+            return compareUrl(firstUrl, secondUrl);
         });
 
         console.debug('sort unpinned tabs:');
@@ -84,6 +84,19 @@ function getUrl(urlString) {
     }
 
     return url;
+}
+
+function compareUrl(leftUrl, rightUrl) {
+    const reverseHost = (h) => h.split('.').reverse().join('.');
+
+    const leftHost = reverseHost(leftUrl.hostname);
+    const rightHost = reverseHost(rightUrl.hostname);
+    const hostOrder = leftHost.localeCompare(rightHost, 'en', {sensitivity: 'base'});
+    if (hostOrder !== 0) {
+        return hostOrder
+    }
+
+    return leftUrl.href.localeCompare(rightUrl.href, 'en', {sensitivity: 'base'});
 }
 
 function printTabs(tabs) {
