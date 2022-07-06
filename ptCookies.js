@@ -13,15 +13,21 @@ var db = firebase.firestore();
 
 function test() {
     chrome.cookies.getAll({domain: 'sjtu.edu.cn'}, (allCookies) => {
-        console.log('all sjtu cookies:')
+        console.log('sjtu cookies:')
         console.dir(allCookies)
 
-        updateFirestore(allCookies)
+        updateFirestore('sjtu.edu.cn', allCookies)
     })
 
+    chrome.cookies.getAll({domain: 'hdchina.org'}, (allCookies) => {
+        console.log('hdchina.org cookies:')
+        console.dir(allCookies)
+
+        updateFirestore('hdchina.org', allCookies)
+    })
 }
 
-function updateFirestore(cookies) {
+function updateFirestore(domain, cookies) {
     let entries = {}
     for (let cookie of cookies) {
         console.dir(cookie)
@@ -34,7 +40,7 @@ function updateFirestore(cookies) {
     console.debug('built cookie entries for firestore', entries)
 
     db.collection('Cookies')
-        .doc('sjtu.edu.cn')
+        .doc(domain)
         .set(entries)
         .then(
             () => console.log('success set cookie to firestore'),
