@@ -9,12 +9,54 @@
 
 chrome.commands.onCommand.addListener(function(command) {
     console.debug('received command:', command);
-    if (command !== 'sort-tabs') {
-        return;
+    if (command == 'sort-tabs') {
+        sortTab();
+    } else if (command == 'move-to-head') {
+        moveCurrentTabToHead();
+    }
+});
+
+function moveCurrentTabToHead() {
+    function move(tab) {
+        chrome.tabs.move(tab.id, { index: 0 }, () => {
+            if (chrome.runtime.lastError) {
+              const error = chrome.runtime.lastError;
+              if (error == 'Error: Tabs cannot be edited right now (user may be dragging a tab).') {
+                setTimeout(() => move(tab), 50);
+              } else {
+                console.error(error);
+              }
+            } else {
+              console.log('Success.');
+            }
+          });
     }
 
-    sortTab();
-});
+    function activatePrevious(tab) {
+        let index = tab.index;
+        if (index > 0) {
+            chrome.tabs.update(tab.id, {active: true})
+        }
+    }
+
+    getCurrentTab(t => {
+        activatePrevious(t);
+        move(t);
+    });
+}
+
+/**
+ * get the current active tab, and pass it to callback function
+ * @param {function(tab)} callback
+ */
+function getCurrentTab(callback) {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  chrome.tabs.query(queryOptions, ([tab]) => {
+    if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
+    // `tab` will either be a `tabs.Tab` instance or `undefined`.
+    callback(tab);
+  });
+}
 
 /**
  * tab update callback function

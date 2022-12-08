@@ -41,6 +41,12 @@
       "suggested_key": {
         "default": "Ctrl+U"
       }
+    },
+    "move-to-head": {
+      "description": "move current tab to head",
+      "suggested_key": {
+        "default": "Ctrl+J"
+      }
     }
   }
 }
