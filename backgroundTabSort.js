@@ -2,11 +2,6 @@
  * background scripts for sorting tabs
  */
 
-/*
- * disable auto sort tabs
- */
-// chrome.tabs.onUpdated.addListener(updateTab);
-
 chrome.commands.onCommand.addListener(function(command) {
     console.debug('received command:', command);
     if (command == 'sort-tabs') {
@@ -59,23 +54,9 @@ function getCurrentTab(callback) {
 }
 
 /**
- * tab update callback function
- * function(integer tabId, object changeInfo, Tab tab) {...};
+ * sort all tabs by their url
+ * "www.google.com" always comes to the head, just my personal preference
  */
-function updateTab(tabId, changeInfo, tab) {
-    console.debug('tab updated: ', {
-        id: tabId,
-        index: tab.index,
-        title: tab.title,
-        url: tab.url,
-    });
-    console.debug(changeInfo);
-
-    if (!tab.pinned && changeInfo.url) {
-        sortTab();
-    }
-}
-
 function sortTab() {
     chrome.tabs.query({}, tabs => {
         if (!tabs || tabs.length <= 0) {
@@ -108,6 +89,12 @@ function sortTab() {
     })
 }
 
+/**
+ * tabs are only sorted in the array, they are still in the original position in Chrome window
+ * this function makes the actual movement
+ * @param {array} sortedTabs array of tabs sorted by url
+ * @param {int} startIndex the first tab index after skipping all pinned tabs
+ */
 function moveTabs(sortedTabs, startIndex) {
     for(let i = 0; i < sortedTabs.length; i++) {
         const tab = sortedTabs[i];
@@ -119,6 +106,9 @@ function moveTabs(sortedTabs, startIndex) {
 
 function getUrl(urlString) {
     const url = new URL(decodeURI(urlString));
+
+    //special handling for workona extension, it suspends tab and changes the orginal url to it's own url, e.g.:
+    // www.google.com => https://workona.com/redirect/#url=www.google.com
     if (url && url.href.startsWith('https://workona.com/redirect/')) {
         const params = new URLSearchParams(url.hash);
         const actualUrlString = params.get('url');
@@ -131,6 +121,8 @@ function getUrl(urlString) {
 function compareUrl(leftUrl, rightUrl) {
     const reverseHost = (h) => h.split('.').reverse().join('.');
 
+    //reverse host component before sorting, this makes subdomains of the same host sorted in the same place
+    //e.g. blog.google.com, map.google.com => these two will be sorted close to each other
     const leftHost = reverseHost(leftUrl.hostname);
     const rightHost = reverseHost(rightUrl.hostname);
     const hostOrder = leftHost.localeCompare(rightHost, 'en', {sensitivity: 'base'});
@@ -141,6 +133,10 @@ function compareUrl(leftUrl, rightUrl) {
     return leftUrl.href.localeCompare(rightUrl.href, 'en', {sensitivity: 'base'});
 }
 
+/**
+ * for debugging
+ * @param {array} tabs 
+ */
 function printTabs(tabs) {
     for (tab of tabs) {
         console.debug('%d: %s %s, pined: %s', tab.index, tab.url, tab.title, tab.pinned);

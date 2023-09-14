@@ -10,10 +10,7 @@
   "background": {
     "scripts": [
       "backgroundGoogleTab.js",
-      "backgroundTabSort.js",
-      "firebase-app.js",
-      "firebase-firestore.js",
-      "ptCookies.js"
+      "backgroundTabSort.js"
     ],
     "persistent": false
   },
@@ -25,7 +22,6 @@
   ],
   "permissions": [
     "tabs",
-    "cookies",
     "https://*/*",
     "http://*/*"
   ],

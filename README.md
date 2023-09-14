@@ -1,6 +1,4 @@
-# goto-google
-
-a chrome extension to reduce your google search tabs
+# About
 
 ## How to use
 
