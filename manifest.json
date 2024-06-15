@@ -33,13 +33,13 @@
       }
     },
     "sort-tabs-by-url": {
-      "description": "sort all open tabs",
+      "description": "sort tabs by url",
       "suggested_key": {
         "default": "Ctrl+U"
       }
     },
     "sort-tabs-by-access-time": {
-      "description": "sort all open tabs",
+      "description": "sort tabs by access time",
       "suggested_key": {
         "default": "Ctrl+Shift+U"
       }
