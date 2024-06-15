@@ -2,10 +2,22 @@
  * background scripts for sorting tabs
  */
 
+const SortBy = Object.freeze({
+    URL: Symbol('url'),
+    LAST_ACCESS_TIME: Symbol('last-access-time'),
+})
+
+const sortFunctions = Object.freeze({
+    [SortBy.URL]: sortByUrl,
+    [SortBy.LAST_ACCESS_TIME]: sortByAccessTime,
+})
+
 chrome.commands.onCommand.addListener(function(command) {
     console.debug('received command:', command);
-    if (command == 'sort-tabs') {
-        sortTab();
+    if (command == 'sort-tabs-by-url') {
+        sortTab(SortBy.URL);
+    } else if (command == 'sort-tabs-by-access-time') {
+        sortTab(SortBy.LAST_ACCESS_TIME)
     } else if (command == 'move-to-head') {
         moveCurrentTabToHead();
     }
@@ -57,7 +69,7 @@ function getCurrentTab(callback) {
  * sort all tabs by their url
  * "www.google.com" always comes to the head, just my personal preference
  */
-function sortTab() {
+function sortTab(by) {
     chrome.tabs.query({}, tabs => {
         if (!tabs || tabs.length <= 0) {
             console.error('no tabs found');
@@ -70,23 +82,46 @@ function sortTab() {
         unpinnedTabs = tabs.filter(t => !t.pinned);
         diff = tabs.length - unpinnedTabs.length;
 
-        unpinnedTabs.sort((first, second) => {
-            firstUrl = getUrl(first.url)
-            secondUrl = getUrl(second.url)
-            if (firstUrl.host == "www.google.com") {
-                return -1;
-            }
-            if (secondUrl.host == "www.google.com") {
-                return 1;
-            }
-            return compareUrl(firstUrl, secondUrl);
-        });
+        unpinnedTabs.sort(sortFunctions[by]);
 
         console.debug('sort unpinned tabs:');
         printTabs(unpinnedTabs);
 
         moveTabs(unpinnedTabs, diff);
     })
+}
+
+function sortByUrl(left, right) {
+    leftUrl = getUrl(left.url)
+    rightUrl = getUrl(right.url)
+    if (leftUrl.host == "www.google.com") {
+        return -1;
+    }
+    if (rightUrl.host == "www.google.com") {
+        return 1;
+    }
+    return compareUrl(leftUrl, rightUrl);
+}
+
+function sortByAccessTime(left, right) {
+    leftUrl = getUrl(left.url)
+    rightUrl = getUrl(right.url)
+    if (leftUrl.host == "www.google.com") {
+        return -1;
+    }
+    if (rightUrl.host == "www.google.com") {
+        return 1;
+    }
+
+    if (!left.lastAccessed) {
+        return -1;
+    } else if (!right.lastAccessed) {
+        return 1;
+    } else if (left.lastAccessed == right.lastAccessed) {
+        return 0;
+    }
+
+    return left.lastAccessed < right.lastAccessed ? -1 : 1;
 }
 
 /**

@@ -32,10 +32,16 @@
         "default": "Ctrl+I"
       }
     },
-    "sort-tabs": {
+    "sort-tabs-by-url": {
       "description": "sort all open tabs",
       "suggested_key": {
         "default": "Ctrl+U"
+      }
+    },
+    "sort-tabs-by-access-time": {
+      "description": "sort all open tabs",
+      "suggested_key": {
+        "default": "Ctrl+Shift+U"
       }
     },
     "move-to-head": {
