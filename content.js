@@ -40,8 +40,11 @@ function highlightAndSelectSearchText() {
 }
 
 /**
- *
- *
+ * features:
+ *  - find all the links in the current web page
+ *  - highlight the links with a light yellow background color
+ *  - add a superscript icon to the links if they are external links
+ *  - when the shortcut key is pressed again, toggle between highlighting and removing the highlighting
  */
 let isHighlighted = false;
 
@@ -55,7 +58,10 @@ function toggleHighlightLinks() {
 }
 
 function highlightLinks() {
-    const links = document.getElementsByTagName('a');
+    const links = document.querySelectorAll('a[href]:not([href=""]):not([href="/"])');
+
+    console.debug('found %d links', links.length);
+
     const currentDomain = window.location.hostname;
 
     for (const link of links) {
@@ -66,22 +72,39 @@ function highlightLinks() {
         // Check if it's an external link
         const linkDomain = new URL(link.href).hostname;
         if (linkDomain && linkDomain !== currentDomain) {
-            // Add superscript icon for external links
-            const icon = document.createElement('sup');
-            icon.innerHTML = ' ↗';
-            icon.style.color = '#666';
-            icon.classList.add('external-link-icon');
+            // Create container for external link indicators
+            const container = document.createElement('sup');
+            container.style.display = 'inline-flex';
+            container.style.alignItems = 'center';
+            container.style.marginLeft = '4px';
+            container.classList.add('external-link-icon');
 
-            // Only add icon if it doesn't already exist
+            // Add favicon image
+            const favicon = document.createElement('img');
+            favicon.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(linkDomain)}`;
+            favicon.style.width = '16px';
+            favicon.style.height = '16px';
+            favicon.style.marginRight = '2px';
+
+            // Add arrow icon
+            const arrow = document.createElement('span');
+            arrow.innerHTML = '↗';
+            arrow.style.color = '#666';
+
+            // Combine elements
+            container.appendChild(arrow);
+            container.appendChild(favicon);
+
+            // Only add container if it doesn't already exist
             if (!link.querySelector('.external-link-icon')) {
-                link.appendChild(icon);
+                link.appendChild(container);
             }
         }
     }
 }
 
 function removeHighlights() {
-    const links = document.getElementsByTagName('a');
+    const links = document.querySelectorAll('a[href]:not([href=""]):not([href="/"])');
     for (const link of links) {
         link.style.backgroundColor = '';
 

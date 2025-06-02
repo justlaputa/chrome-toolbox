@@ -12,8 +12,20 @@ const sortFunctions = Object.freeze({
     [SortBy.LAST_ACCESS_TIME]: sortByAccessTime,
 })
 
+const myCommands = [
+    'sort-tabs-by-url',
+    'sort-tabs-by-access-time',
+    'move-to-head',
+]
+
 chrome.commands.onCommand.addListener(function(command) {
-    console.debug('received command:', command);
+    if (!myCommands.includes(command)) {
+        console.debug('TabSort received command: %s, not my command, skip', command);
+        return;
+    }
+
+    console.debug('TabSort received command: %s, my command, handling it', command);
+
     if (command == 'sort-tabs-by-url') {
         sortTab(SortBy.URL);
     } else if (command == 'sort-tabs-by-access-time') {
