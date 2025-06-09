@@ -1,9 +1,2 @@
 # About
-
-## How to use
-
-## Features
-
-## Configuration
-
-## License
+Handy small chrome enhancements for my life
