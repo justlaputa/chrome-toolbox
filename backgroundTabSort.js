@@ -54,7 +54,7 @@ function moveCurrentTabToHead() {
     function activatePrevious(tab) {
         let index = tab.index;
         if (index > 0) {
-            chrome.tabs.update(tab.id, {active: true})
+            chrome.tabs.highlight({ tabs: [index - 1] }, function() {});
         }
     }
 

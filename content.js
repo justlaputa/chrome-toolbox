@@ -92,8 +92,8 @@ function highlightLinks() {
             arrow.style.color = '#666';
 
             // Combine elements
-            container.appendChild(arrow);
             container.appendChild(favicon);
+            container.appendChild(arrow);
 
             // Only add container if it doesn't already exist
             if (!link.querySelector('.external-link-icon')) {
