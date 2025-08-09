@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
 
-  "name": "Goto Google",
-  "description": "Go to your google search tab without open a new one",
+  "name": "Mytools",
+  "description": "Mytools is a chrome extension that provides some useful tools",
   "version": "1.0",
 
   "action": {
