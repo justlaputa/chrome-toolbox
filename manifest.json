@@ -1,19 +1,14 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "Goto Google",
   "description": "Go to your google search tab without open a new one",
   "version": "1.0",
 
-  "browser_action": {
+  "action": {
   },
   "background": {
-    "scripts": [
-      "backgroundGoogleTab.js",
-      "backgroundTabSort.js",
-      "backgroundHighlightLinks.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -23,6 +18,9 @@
   ],
   "permissions": [
     "tabs",
+    "activeTab"
+  ],
+  "host_permissions": [
     "https://*/*",
     "http://*/*"
   ],
