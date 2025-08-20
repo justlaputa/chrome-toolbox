@@ -18,7 +18,8 @@
   ],
   "permissions": [
     "tabs",
-    "activeTab"
+    "activeTab",
+    "clipboardWrite"
   ],
   "host_permissions": [
     "https://*/*",
@@ -48,6 +49,9 @@
       "suggested_key": {
         "default": "Ctrl+K"
       }
+    },
+    "confluence-extract": {
+      "description": "extract title and link from Confluence page and copy to clipboard"
     }
   }
 }

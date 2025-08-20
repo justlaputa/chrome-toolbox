@@ -81,6 +81,9 @@ chrome.commands.onCommand.addListener(function(command) {
     case 'highlight-links':
       handleHighlightLinks();
       break;
+    case 'confluence-extract':
+      handleConfluenceExtract();
+      break;
     default:
       console.debug('Unknown command:', command);
   }
@@ -307,6 +310,31 @@ function handleHighlightLinks() {
 
     chrome.tabs.sendMessage(activeTab.id, {action: 'HIGHLIGHT_LINKS'}, function(response) {
       console.log('get response from content script', response);
+    });
+  });
+}
+
+// === CONFLUENCE EXTRACT FUNCTIONALITY ===
+function handleConfluenceExtract() {
+  console.debug('Handling confluence-extract command');
+  
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    if (tabs.length === 0) return;
+
+    let activeTab = tabs[0];
+    if (activeTab.url.startsWith('chrome://') || activeTab.url.startsWith('chrome-extension://')) {
+      console.debug('active tab is chrome tab, skip');
+      return;
+    }
+
+    console.debug('sending confluence extract command to active tab:', activeTab);
+
+    chrome.tabs.sendMessage(activeTab.id, {action: 'CONFLUENCE_EXTRACT'}, function(response) {
+      if (chrome.runtime.lastError) {
+        console.error('Error sending message to content script:', chrome.runtime.lastError);
+        return;
+      }
+      console.log('get response from confluence extract content script', response);
     });
   });
 }
